@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/donaters_page.dart';
+import 'package:flutter_application_1/screens/updatedonors.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,8 +13,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final CollectionReference donor =
       FirebaseFirestore.instance.collection('Donor');
-  // bool showDetails = false;
-   List<bool> showDetails = List.filled(10, false);
+
+  List<bool> showDetails = List.filled(10, false);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +28,7 @@ class _HomeState extends State<Home> {
           Expanded(
               flex: 10,
               child: StreamBuilder(
-                stream: donor.snapshots(),
+                stream: donor.orderBy("name").snapshots(),
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -37,8 +38,7 @@ class _HomeState extends State<Home> {
                             snapshot.data.docs[index];
                         return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              // color: Colors.amber,
+                            child: SizedBox(
                               child: Column(
                                 children: [
                                   Row(
@@ -52,19 +52,21 @@ class _HomeState extends State<Home> {
                                       ),
                                       Text(
                                         donorsdata['name'],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Row(
                                         children: [
                                           IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(Icons.edit_note),
+                                            onPressed: () {
+                                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>  UpdateDoners(donordetails: donorsdata)));
+                                            },
+                                            icon: const Icon(Icons.edit_note),
                                           ),
                                           IconButton(
                                             onPressed: () {},
-                                            icon: Icon(Icons.delete),
+                                            icon: const Icon(Icons.delete),
                                           ),
                                         ],
                                       ),
@@ -73,7 +75,8 @@ class _HomeState extends State<Home> {
                                   TextButton(
                                       onPressed: () {
                                         setState(() {
-                                          showDetails[index] = !showDetails[index];
+                                          showDetails[index] =
+                                              !showDetails[index];
                                         });
                                       },
                                       child: Icon(!showDetails[index]
@@ -93,12 +96,12 @@ class _HomeState extends State<Home> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          Divider(),
+                                          const Divider(),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "Name: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -111,7 +114,7 @@ class _HomeState extends State<Home> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "Phone Number: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -125,7 +128,7 @@ class _HomeState extends State<Home> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "Email: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -138,7 +141,7 @@ class _HomeState extends State<Home> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "Date Of Birth: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -151,7 +154,7 @@ class _HomeState extends State<Home> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "District: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -164,7 +167,7 @@ class _HomeState extends State<Home> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "City/Town: ",
                                                 style: TextStyle(
                                                     fontWeight:
@@ -183,14 +186,15 @@ class _HomeState extends State<Home> {
                       },
                     );
                   }
-                  return Container(
+                  return const SizedBox(
                     child: Text("mujeebaka"),
                   );
                 },
-              )),
+              )
+              ),
           Expanded(
               flex: 1,
-              child: Container(
+              child: SizedBox(
                 child: Center(
                   child: ElevatedButton(
                       style:
@@ -210,60 +214,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-
-
-                        // height: 80,
-                      //   color: Colors.white,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     children: [
-                      //       Column(
-                      //         children: [
-                      //           Container(
-                      //             child: CircleAvatar(
-                      //               backgroundColor: Colors.red,
-                      //               radius: 30,
-                      //               child: Center(child: Text(donorsdata['bloodgroup'])),
-                      //             ),
-                      //           ),
-                      //           SizedBox(height: 10,),
-                      //            Container(
-                                 
-                      //             // color: Colors.amber,
-                      //            child: const Column(
-                      //             children: [
-                      //               Text("Donor's Details"),
-                      //               Divider(
-                                      
-                      //                 color: Colors.black,
-                      //               )
-                      //             ],
-                      //            ),
-                      //           )
-                           
-                              
-                      //         ],
-                      //       ),
-                      //       Column(
-                      //         children: [
-                      //           Text(donorsdata['name'],style:const TextStyle(fontWeight: FontWeight.bold,fontSize: 25),),
-                      //           Text(donorsdata['phone'].toString())
-                      //         ],
-                      //       ),
-                      //        Row(
-                      //         children: [
-                      //           IconButton(onPressed: (){}, icon: const Icon(Icons.edit_note_outlined)),
-                      //             IconButton(onPressed: (){}, icon:const  Icon(Icons.delete,),color: Colors.red,)
-                      //         ],
-                              
-                      //        ), 
-                             
-                      //     ],
-                          
-                      //   ),
-                        
-                      // ),

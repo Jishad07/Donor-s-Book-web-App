@@ -1,31 +1,53 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/donaters_page.dart';
 import 'package:flutter_application_1/screens/home.dart';
 
-class Donaters_page extends StatefulWidget {
-  const Donaters_page({super.key});
+class UpdateDoners extends StatefulWidget {
+  final DocumentSnapshot donordetails;
+  const UpdateDoners({super.key,required this.donordetails});
 
   @override
-  State<Donaters_page> createState() => _Donaters_pageState();
+  State<UpdateDoners> createState() => _UpdateDonersState();
 }
 
-class _Donaters_pageState extends State<Donaters_page> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController name=TextEditingController();
-  final TextEditingController phone=TextEditingController();
-  final TextEditingController email=TextEditingController();
-  final TextEditingController dateofbirth  =TextEditingController();
-  final TextEditingController district=TextEditingController();
-  final TextEditingController city=TextEditingController();
-  final TextEditingController blood=TextEditingController();
+class _UpdateDonersState extends State<UpdateDoners> {
+   final GlobalKey<FormState>editform=GlobalKey<FormState>();
+   final TextEditingController editname=TextEditingController();
+   final TextEditingController editphone=TextEditingController();
+   final TextEditingController editemail=TextEditingController();
+   final TextEditingController editdateofbirth=TextEditingController();
+   final TextEditingController editblood=TextEditingController();
+   final TextEditingController editdistrict=TextEditingController();
+   final TextEditingController editcity=TextEditingController();
+    List<String> items = ['AB+ve', 'AB-ve', 'A+ve', 'A-ve','B+ve','B-ve','Oh+ve','Oh-ve','O+ve','O-ve'];
    String? selectedItem;
-   List<String> items = ['AB+ve', 'AB-ve', 'A+ve', 'A-ve','B+ve','B-ve','Oh+ve','Oh-ve','O+ve','O-ve'];
    final CollectionReference donor =
       FirebaseFirestore.instance.collection('Donor');
-      
+    
+    @override
+  void initState() {
+  
+    super.initState();
+   
+  
+   
+
+
+   
+  }
+    
   @override
   Widget build(BuildContext context) {
-    
+     editname.text=widget.donordetails['name'].toString();
+   editphone.text=widget.donordetails['phone'].toString();
+   editemail.text=widget.donordetails['email'].toString();
+   editdateofbirth.text=widget.donordetails['dateofbirth'].toString();
+   editblood.text=widget.donordetails['bloodgroup'].toString();
+   editdistrict.text=widget.donordetails['district'].toString();
+   editcity.text=widget.donordetails['city'].toString();
+   final String docId = widget.donordetails.id.toString();
+   
     double paddingwidth = MediaQuery.of(context).size.width*0.2;
     return Scaffold(
       appBar: PreferredSize(
@@ -67,13 +89,13 @@ class _Donaters_pageState extends State<Donaters_page> {
                         child: Padding(
                           padding:  EdgeInsets.only(left:paddingwidth,right: paddingwidth,top: 10,bottom: 10),
                           child: Form(
-                            key: _formKey,
+                            key: editform,
                             
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 TextFormField(
-                                  controller: name,
+                                  controller: editname,
                                   
                                  textInputAction: TextInputAction.next, // Set the desired text input action
                                  textCapitalization: TextCapitalization.sentences, 
@@ -96,7 +118,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                           return null;
                                         },),
                                 TextFormField(
-                                  controller: phone,
+                                  controller: editphone,
                                   cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -120,7 +142,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                           return null;
                                         },),
                                 TextFormField(
-                                  controller: email,
+                                  controller: editemail,
                                   cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -144,7 +166,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                         },),
                                 TextFormField(
                                   
-                                  controller: dateofbirth,
+                                  controller: editdateofbirth,
                                   cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -167,7 +189,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                           return null;
                                         },),
                                            TextFormField(
-                                  controller: blood,
+                                  controller: editblood,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                       suffixIcon: IconButton(onPressed: (){
@@ -193,7 +215,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                         },),
                                 TextFormField(
                                 
-                                  controller:district,
+                                  controller:editdistrict,
                                   cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -212,7 +234,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                                           return null;
                                         },),
                                 TextFormField(
-                                  controller: city,
+                                  controller: editcity,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -233,10 +255,10 @@ class _Donaters_pageState extends State<Donaters_page> {
                                         },),
                                 ElevatedButton(
                                     onPressed: () {
-                                      adddonor();
+                                     editedonor(docId);
                                     },
                                     child: const Text(
-                                      "Submit",
+                                      "Update",
                                       style: TextStyle(color: Colors.red),
                                     ))
                               ],
@@ -253,25 +275,26 @@ class _Donaters_pageState extends State<Donaters_page> {
     );
   }
 
-  void  adddonor(){
+   void  editedonor(docId){
     final data={
-      'name':name.text,
-      'phone':phone.text,
-      'email':email.text,
-      'dateofbirth':dateofbirth.text,
-      'bloodgroup':blood.text,
-      'district':district.text,
-      'city':city.text,
+      'name':editname.text,
+      'phone':editphone.text,
+      'email':editemail.text,
+      'dateofbirth':editdateofbirth.text,
+      'bloodgroup':editblood.text,
+      'district':editdistrict.text,
+      'city':editcity.text,
     };
 
-  if(_formKey.currentState!.validate()){
-    donor.add(data);
+  if(editform.currentState!.validate()){
+    donor.doc(docId).update(data);
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
   }
   else{
    
   }
   }
+
    void showtablelist(BuildContext context){
       showModalBottomSheet(
         context: context,
@@ -284,7 +307,7 @@ class _Donaters_pageState extends State<Donaters_page> {
                 onTap: () {
                    setState(() {
                   selectedItem = items[index];
-                  blood.text = selectedItem!;
+                  editblood.text = selectedItem!;
                 });
                 Navigator.pop(context);
                 },
@@ -293,32 +316,3 @@ class _Donaters_pageState extends State<Donaters_page> {
          });
     }
 }
-
-class SShapePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Colors.red;
-    Path path = Path()
-      ..moveTo(0, size.height) // Start at bottom left
-      // ..lineTo(0, size.height * 0.9) // Move up slightly
-      ..cubicTo(
-          size.width * 0.2,
-          size.height * 0.8,
-          size.width * 0.8,
-          size.height * 0.2,
-          size.width,
-          size.height * 0) // Draw a cubic bezier curve
-      ..lineTo(size.width, size.height) // Draw to bottom right
-      ..lineTo(0, size.height); // Complete the shape
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
-    
-
-   
