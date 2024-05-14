@@ -189,7 +189,8 @@ class _UpdateDonersState extends State<UpdateDoners> {
                                           return null;
                                         },),
                                            TextFormField(
-                                  controller: editblood,
+                                            
+                                    controller:editblood ,
                                     cursorColor: Colors.red,
                                     decoration: InputDecoration(
                                       suffixIcon: IconButton(onPressed: (){
@@ -208,7 +209,7 @@ class _UpdateDonersState extends State<UpdateDoners> {
                                         hintText: "Blood Group"),
                                         
                                         validator: (value) {
-                                          if(value==null||value.isEmpty){
+                                          if(value==null||value.isEmpty||selectedItem==null){
                                             return "Add Your Blood Group";
                                           }
                                           return null;
@@ -281,13 +282,14 @@ class _UpdateDonersState extends State<UpdateDoners> {
       'phone':editphone.text,
       'email':editemail.text,
       'dateofbirth':editdateofbirth.text,
-      'bloodgroup':editblood.text,
+      'bloodgroup':selectedItem,
       'district':editdistrict.text,
       'city':editcity.text,
     };
 
   if(editform.currentState!.validate()){
     donor.doc(docId).update(data);
+    // .then((value) => Navigator.of(context).pop())
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Home()));
   }
   else{
