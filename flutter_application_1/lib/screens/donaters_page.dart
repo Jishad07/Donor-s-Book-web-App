@@ -22,7 +22,10 @@ class _Donaters_pageState extends State<Donaters_page> {
    List<String> items = ['AB+ve', 'AB-ve', 'A+ve', 'A-ve','B+ve','B-ve','Oh+ve','Oh-ve','O+ve','O-ve'];
    final CollectionReference donor =
       FirebaseFirestore.instance.collection('Donor');
-      
+        
+
+  
+
   @override
   Widget build(BuildContext context) {
     

@@ -13,7 +13,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final CollectionReference donor =
       FirebaseFirestore.instance.collection('Donor');
-
+     
+     void deletedonor(id){
+      donor.doc(id).delete();
+     }
   List<bool> showDetails = List.filled(10, false);
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,9 @@ class _HomeState extends State<Home> {
                                             icon: const Icon(Icons.edit_note),
                                           ),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              deletedonor(donorsdata.id);
+                                            },
                                             icon: const Icon(Icons.delete),
                                           ),
                                         ],
@@ -187,7 +192,9 @@ class _HomeState extends State<Home> {
                     );
                   }
                   return const SizedBox(
-                    child: Text("mujeebaka"),
+                   child: Center(
+                  child: Text("No Data Found"),
+                   ),
                   );
                 },
               )
